@@ -1,17 +1,22 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl, Field
 
 
 class MemeBase(BaseModel):
-    title: str
-    description: str
+    title: str = Field(..., max_length=100, min_length=1, description="Title")
+    description: str = Field(..., max_length=300, description="Description")
 
 
 class MemeCreate(MemeBase):
-    pass
+    image_url: HttpUrl = Field(..., description="URL of the image")
 
 
 class MemeUpdate(MemeBase):
-    pass
+    title: str | None = None
+    description: str | None = None
+    image_url: HttpUrl | None = Field(None, description="URL of the image (optional)")
+
+    class Config:
+        orm_mode = True
 
 
 class Meme(MemeBase):

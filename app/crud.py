@@ -26,7 +26,8 @@ async def update_meme(db: AsyncSession, meme_id: int, meme: MemeUpdate):
     db_meme = await get_meme(db, meme_id)
     if db_meme is None:
         return None
-    for key, value in meme.dict().items():
+    update_data = meme.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
         setattr(db_meme, key, value)
     await db.commit()
     await db.refresh(db_meme)

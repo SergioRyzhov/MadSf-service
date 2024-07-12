@@ -5,7 +5,12 @@ from .database import get_db, init_db
 from .config import settings
 from media_service.s3 import upload_image
 
-app = FastAPI()
+
+app = FastAPI(
+    title="Meme API",
+    description="Meme API",
+    version="1.0.0",
+)
 
 
 @app.on_event("startup")
@@ -37,10 +42,13 @@ async def create_meme(title: str, description: str, file: UploadFile = File(...)
 
 @app.put("/memes/{id}", response_model=schemas.Meme)
 async def update_meme(id: int, meme: schemas.MemeUpdate, db: AsyncSession = Depends(get_db)):
-    updated_meme = await crud.update_meme(db, meme_id=id, meme=meme)
-    if updated_meme is None:
-        raise HTTPException(status_code=404, detail="Meme not found")
-    return updated_meme
+    try:
+        updated_meme = await crud.update_meme(db, meme_id=id, meme=meme)
+        if updated_meme is None:
+            raise HTTPException(status_code=404, detail="Meme not found")
+        return updated_meme
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.delete("/memes/{id}", response_model=schemas.Meme)
