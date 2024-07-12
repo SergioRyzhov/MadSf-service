@@ -6,7 +6,7 @@ COPY ./app /app/app
 COPY ./media_service /app/media_service
 COPY ./requirements.txt /app/requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip -r /app/requirements.txt
 
 EXPOSE 8000
 

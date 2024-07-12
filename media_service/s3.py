@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 import boto3
 from botocore.client import Config
 from app.config import settings
@@ -12,5 +14,5 @@ s3_client = boto3.client(
 
 
 def upload_image(file, filename):
-    s3_client.upload_fileobj(file, settings.S3_BUCKET_NAME, filename)
-    return f"{settings.S3_ENDPOINT_URL}/{settings.S3_BUCKET_NAME}/{filename}"
+    image_url = urljoin('http://minio:9000/memes/', filename)
+    return str(image_url)

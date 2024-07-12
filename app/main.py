@@ -1,10 +1,9 @@
-from fastapi import FastAPI, Depends, HTTPException, File, UploadFile
+from fastapi import FastAPI, Depends, HTTPException, File, UploadFile, Form
 from sqlalchemy.ext.asyncio import AsyncSession
-from . import crud, models, schemas
+from . import crud, schemas
 from .database import get_db, init_db
-from .config import settings
 from media_service.s3 import upload_image
-
+from contextlib import asynccontextmanager
 
 app = FastAPI(
     title="Meme API",
@@ -13,9 +12,12 @@ app = FastAPI(
 )
 
 
-@app.on_event("startup")
-async def on_startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await init_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/memes", response_model=list[schemas.Meme])
@@ -33,7 +35,12 @@ async def read_meme(id: int, db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/memes", response_model=schemas.Meme)
-async def create_meme(title: str, description: str, file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
+async def create_meme(
+    title: str,
+    description: str,
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db)
+):
     filename = file.filename
     image_url = upload_image(file.file, filename)
     meme = schemas.MemeCreate(title=title, description=description)

@@ -1,3 +1,4 @@
+aiosqlite==0.20.0
 annotated-types==0.7.0
 anyio==4.4.0
 asyncpg==0.29.0
@@ -15,16 +16,21 @@ httpcore==1.0.5
 httptools==0.6.1
 httpx==0.27.0
 idna==3.7
+iniconfig==2.0.0
 Jinja2==3.1.4
 jmespath==1.0.1
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mdurl==0.1.2
 orjson==3.10.6
+packaging==24.1
+pluggy==1.5.0
 psycopg2-binary==2.9.9
 pydantic==2.8.2
 pydantic_core==2.20.1
 Pygments==2.18.0
+pytest==8.2.2
+pytest-asyncio==0.23.7
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-multipart==0.0.9

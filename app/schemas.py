@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl, Field
+from pydantic import BaseModel, HttpUrl, Field, ConfigDict
 
 
 class MemeBase(BaseModel):
@@ -7,7 +7,7 @@ class MemeBase(BaseModel):
 
 
 class MemeCreate(MemeBase):
-    image_url: HttpUrl = Field(..., description="URL of the image")
+    pass
 
 
 class MemeUpdate(MemeBase):
@@ -16,7 +16,7 @@ class MemeUpdate(MemeBase):
     image_url: HttpUrl | None = Field(None, description="URL of the image (optional)")
 
     class Config:
-        orm_mode = True
+        config_dict = ConfigDict(from_attributes=True)
 
 
 class Meme(MemeBase):
@@ -24,4 +24,4 @@ class Meme(MemeBase):
     image_url: str
 
     class Config:
-        orm_mode = True
+        config_dict = ConfigDict(from_attributes=True)
